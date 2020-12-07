@@ -15,7 +15,7 @@
 
       <gmap-info-window :options="infoOptions" :position="infoWindowPos" :opened="infoWinOpen" 
         @closeclick="infoWinOpen=false">
-        <info-card :marker="selectedMarker"></info-card>
+        <info-card v-if="selectedMarker" :marker="selectedMarker"></info-card>
       </gmap-info-window>
 
       <template v-slot:visible>

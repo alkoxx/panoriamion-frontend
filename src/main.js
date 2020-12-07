@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue'
 import * as GmapVue from 'gmap-vue'
+import vuetify from './plugins/vuetify';
 
 Vue.config.productionTip = false
 
@@ -31,5 +32,6 @@ Vue.use(GmapVue, {
 })
 
 new Vue({
-  render: h => h(App),
+  vuetify,
+  render: h => h(App)
 }).$mount('#app')

@@ -1,6 +1,7 @@
 <template>
   <div id="app">
-    <GmapMap
+    <gmap-map
+      ref="gmap"
       :center="center"
       :zoom="5"
       map-type-id="hybrid"
@@ -13,11 +14,10 @@
         @click="onMarkerSelected(marker)"></gmap-marker>
 
       <gmap-info-window :options="infoOptions" :position="infoWindowPos" :opened="infoWinOpen" 
-        @closeclick="infoWinOpen=false">        
+        @closeclick="infoWinOpen=false">
+        <info-card :marker="selectedMarker"></info-card>
       </gmap-info-window>
 
-      <gmap-marker :key="i" v-for="(m,i) in markers" :position="m.position" :clickable="true" @click="toggleInfoWindow(m,i)"></gmap-marker>
-    
       <template v-slot:visible>
         <div style="position:absolute; top:0; left:0; width:400px; height:100vh; background:rgba(0, 0, 0, 0.3); padding:10px">
           
@@ -33,7 +33,7 @@
           
         </div>      
       </template>    
-    </GmapMap>
+    </gmap-map>
 
   </div>
 </template>
@@ -41,11 +41,15 @@
 <script>
 import { fetchMarkers } from './services/markers-services'
 import { addMarker } from './services/markers-services'
+import infoCard from './components/info-card'
 
 const serverUrl = 'http://127.0.0.1:8000'
 
 export default {
   name: 'App',
+  components: {
+    infoCard,
+  },
   data(){
     return {
       center: {lat:43.0, lng:-2.0},
@@ -55,13 +59,12 @@ export default {
         lng: '',
         selectedFile: ''
       },
+      selectedMarker: null,
       imgUrl: '',
       infoWindowPos: null,
       infoWinOpen: false,
       currentMarkerId: null,
       infoOptions: {
-        content: '',
-        //optional: offset infowindow so it visually sits nicely on top of our marker
         pixelOffset: {
           width: 0,
           height: -35
@@ -88,14 +91,12 @@ export default {
       this.form.selectedFile = event.target.files[0];
     },
     onMarkerSelected(marker){
-      console.log(marker.position)
-      //this.center=marker.position
-      //  this.toggleInfoWindow(marker)
-    },  
+      this.selectedMarker = marker
+      this.$refs.gmap.panTo(marker.position);
+      this.toggleInfoWindow(marker)
+    },
     toggleInfoWindow(marker) {
       this.infoWindowPos = marker.position;
-      this.infoOptions.content = '<div> Hola Hola Hola!!</div>';
-
       if (this.currentMarkerId == marker.id) {
         this.infoWinOpen = !this.infoWinOpen;
       } else {

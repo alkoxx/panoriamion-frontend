@@ -5,12 +5,12 @@
       :center="center"
       :zoom="5"
       map-type-id="hybrid"
-      style="position:absolute; top:0; left:0; bottom:0; width:100%; z-index:-1; "
+      style="position:absolute; top:0; left:0; bottom:0; width:100%; z-index:-1;"
       @click="loadCoord($event)"
     >
 
       <gmap-marker v-for="(marker, index) in markers" :key="index" 
-        :position="marker.position" :clickable="true" :draggable="true"
+        :position="marker.position" :clickable="true"
         @click="onMarkerSelected(marker)"></gmap-marker>
 
       <gmap-info-window :options="infoOptions" :position="infoWindowPos" :opened="infoWinOpen" 
@@ -19,20 +19,8 @@
       </gmap-info-window>
 
       <template v-slot:visible>
-        <div style="position:absolute; top:0; left:0; width:400px; height:100vh; background:rgba(0, 0, 0, 0.3); padding:10px">
-          
-          <form enctype="multipart/form-data">
-            <input type="text" placeholder="Latitude" v-model="form.lat">
-            <input type="text" placeholder="Longitude" v-model="form.lng">
-            <input type="file" @change="onFileSelected" />
-
-            <button @click.prevent="submitMarker">Add Marker</button>
-          </form>
-
-          <img v-if="imgUrl" :src="imgUrl" alt="" width="100%" height="300">
-          
-        </div>      
-      </template>    
+        <side-panel :coords="coords"></side-panel>
+      </template>
     </gmap-map>
 
   </div>
@@ -42,6 +30,7 @@
 import { fetchMarkers } from './services/markers-services'
 import { addMarker } from './services/markers-services'
 import infoCard from './components/info-card'
+import sidePanel from './components/side-panel'
 
 const serverUrl = 'http://127.0.0.1:8000'
 
@@ -49,18 +38,17 @@ export default {
   name: 'App',
   components: {
     infoCard,
+    sidePanel,
   },
   data(){
     return {
       center: {lat:43.0, lng:-2.0},
       markers: [],
-      form: {
+      coords: {
         lat: '',
-        lng: '',
-        selectedFile: ''
+        lng: ''
       },
       selectedMarker: null,
-      imgUrl: '',
       infoWindowPos: null,
       infoWinOpen: false,
       currentMarkerId: null,
@@ -77,8 +65,8 @@ export default {
   },
   methods: {
     loadCoord(event){
-      this.form.lat = event.latLng.lat()
-      this.form.lng = event.latLng.lng()
+      this.coords.lat = event.latLng.lat()
+      this.coords.lng = event.latLng.lng()
     },
     async getMarkers(){
       this.markers = await fetchMarkers(serverUrl + '/api/markers')
@@ -86,9 +74,6 @@ export default {
     submitMarker(){
       addMarker(serverUrl + '/marker/add-marker', this.form)
       this.getMarkers()
-    },
-    onFileSelected(event){
-      this.form.selectedFile = event.target.files[0];
     },
     onMarkerSelected(marker){
       this.selectedMarker = marker

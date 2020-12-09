@@ -1,5 +1,11 @@
 <template>
-  <div>{{marker.id}}</div>
+    <v-card>        
+        <v-img height="250"
+            :src="'http://127.0.0.1:8000' + '/uploads/' + marker.image">
+        </v-img>
+        <v-card-title>Info</v-card-title>
+        <v-card-text>{{marker.description}}</v-card-text>
+    </v-card>
 </template>
 
 <script>

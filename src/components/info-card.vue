@@ -1,6 +1,6 @@
 <template>
     <v-card>        
-        <v-img height="250"
+        <v-img width="300"
             :src="'http://127.0.0.1:8000' + '/uploads/' + marker.image">
         </v-img>
         <v-card-title>Info</v-card-title>

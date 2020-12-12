@@ -1,30 +1,25 @@
 <template>
     <div>
         <transition name="fade">
-            <div>
-                <v-card v-if="open" class="sidepanel" dark>
-                    <v-card-title>
-                        <h1>Create Marker</h1>
-                    </v-card-title>
-                    <v-card-text>
-                        <v-form>
-                            <v-text-field label="Latitude" v-model="coords.lat" />
-                            <v-text-field label="Longitude" v-model="coords.lng" />
-                            <v-file-input accept="image/*" label="File input" @change="onFileSelected"></v-file-input>
-                        </v-form>
-                    </v-card-text>
-                    <v-card-actions>
-                        <v-btn @click.prevent="submitMarker" color="success">Add</v-btn>                        
-                    </v-card-actions>
-                </v-card>
-            </div>
+            <v-card v-if="open" class="sidepanel" dark>
+                <v-card-title>
+                    <h2>Create Marker</h2>
+                </v-card-title>
+                <v-card-text>
+                    <v-form>
+                        <v-text-field label="Latitude" v-model="coords.lat" />
+                        <v-text-field label="Longitude" v-model="coords.lng" />
+                        <v-file-input accept="image/*" label="File input" @change="onFileSelected"></v-file-input>
+                    </v-form>
+                </v-card-text>
+                <v-card-actions>
+                    <v-btn @click.prevent="submitMarker" color="success">Add</v-btn>                        
+                </v-card-actions>   
+            </v-card>
         </transition>
-            
-        <div style="border:1px solid red; position:relative">aaa
-            <v-btn @click="toggleSidePanel">Toggle</v-btn>
-        </div>
-    </div>
-    
+        
+        <v-btn @click="toggle">Toggle</v-btn>
+    </div>    
 </template>
 
 <script>
@@ -49,6 +44,9 @@ export default {
         },
         toggleSidePanel(){
             this.open = !this.open
+        },
+        toggle(){
+            this.open = !this.open
         }
     }
 
@@ -72,10 +70,26 @@ export default {
 
     .fade-enter-active,
     .fade-leave-active{
-        transform: opacity 4s;
+        transition: opacity 1s;
     }
 
     .fade-leave-to{
+        opacity: 0;
+    }
+
+    .test{
+        background-color: green;
+        height: 100px;
+        position:relative;
+    }
+
+    .tt-enter{
+        opacity: 0;
+    }
+    .tt-enter-active, .tt-leave-active{
+        transition: opacity 2s;
+    }
+    .tt-leave-to{
         opacity: 0;
     }
 

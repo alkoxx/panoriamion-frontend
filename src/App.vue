@@ -27,12 +27,9 @@
 </template>
 
 <script>
-import { fetchMarkers } from './services/markers-services'
-import { addMarker } from './services/markers-services'
 import infoCard from './components/info-card'
 import sidePanel from './components/side-panel'
-
-const serverUrl = 'http://127.0.0.1:8000'
+import {mapState} from 'vuex'
 
 export default {
   name: 'App',
@@ -43,7 +40,6 @@ export default {
   data(){
     return {
       center: {lat:43.0, lng:-2.0},
-      markers: [],
       coords: {
         lat: '',
         lng: ''
@@ -61,20 +57,16 @@ export default {
     }
   },
   created(){
-      this.getMarkers();
+    this.$store.dispatch('getMarkers')
+  },
+  computed: {
+    ...mapState(['markers'])
   },
   methods: {
     loadCoord(event){
       this.coords.lat = event.latLng.lat()
       this.coords.lng = event.latLng.lng()
-    },
-    async getMarkers(){
-      this.markers = await fetchMarkers(serverUrl + '/api/markers')
-    },
-    submitMarker(){
-      addMarker(serverUrl + '/marker/add-marker', this.form)
-      this.getMarkers()
-    },
+    },    
     onMarkerSelected(marker){
       this.selectedMarker = marker
       this.$refs.gmap.panTo(marker.position);

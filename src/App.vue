@@ -23,31 +23,36 @@
           :opened="infoWinOpen"
           @closeclick="infoWinOpen = false"
         >
-          <info-card v-if="selectedMarker" :marker="selectedMarker"></info-card>
+          <info-card
+            v-if="selectedMarker"
+            :marker="selectedMarker"
+            @click.native="dialog = !dialog"
+          ></info-card>
         </gmap-info-window>
 
         <template v-slot:visible>
           <v-row>
             <v-col cols="2">
               <side-panel :coords="coords"></side-panel>
-              <v-btn @click.stop="dialog = !dialog">Dialog!!</v-btn>
             </v-col>
             <v-col cols="10">
-              <v-dialog v-model="dialog">
-                <v-card>
-                  <v-toolbar dark color="primary">
-                    <v-btn icon dark @click="dialog = false">
-                      <v-icon>mdi-close</v-icon>
-                    </v-btn>
-                    <v-toolbar-title>Settings</v-toolbar-title>
-                    <v-spacer></v-spacer>
-                    <v-toolbar-items>
-                      <v-btn dark text @click="dialog = false">
-                        Save
-                      </v-btn>
-                    </v-toolbar-items>
-                  </v-toolbar>
-                </v-card>
+              <v-dialog v-model="dialog" fullscreen>
+                <div class="dialog-close">
+                  <v-btn dark icon @click="dialog = false">
+                    <v-icon>mdi-close</v-icon>
+                  </v-btn>
+                </div>
+                <v-carousel height="100%" dark>
+                  <v-carousel-item v-for="(marker, i) in markers" :key="i">
+                    <v-img
+                      contain
+                      height="100%"
+                      :src="
+                        'http://127.0.0.1:8000' + '/uploads/' + marker.image
+                      "
+                    ></v-img>
+                  </v-carousel-item>
+                </v-carousel>
               </v-dialog>
             </v-col>
           </v-row>
@@ -128,5 +133,12 @@ export default {
 .carousel {
   width: 500px;
   height: 800px;
+}
+
+.dialog-close {
+  position: absolute;
+  z-index: 1;
+  text-align: right;
+  padding: 5px 20px;
 }
 </style>

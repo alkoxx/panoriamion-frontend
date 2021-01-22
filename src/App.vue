@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <v-app>
+      <auth></auth>
       <gmap-map
         ref="gmap"
         :center="center"
@@ -65,6 +66,8 @@
 <script>
 import infoCard from "./components/info-card";
 import sidePanel from "./components/side-panel";
+import auth from "./components/Auth";
+
 import { mapState } from "vuex";
 
 export default {
@@ -72,6 +75,7 @@ export default {
   components: {
     infoCard,
     sidePanel,
+    auth,
   },
   data() {
     return {
@@ -94,7 +98,7 @@ export default {
     };
   },
   created() {
-    this.$store.dispatch("getMarkers");
+    //this.$store.dispatch("getMarkers");
   },
   computed: {
     ...mapState(["markers"]),

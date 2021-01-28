@@ -37,6 +37,9 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
+import MarkerService from "../services/MarkerService";
+
 export default {
   name: "SidePanel",
   props: {
@@ -49,13 +52,19 @@ export default {
     };
   },
   methods: {
+    ...mapActions(["getMarkers"]),
     submitMarker() {
-      //addMarker(serverUrl + '/marker/add-marker', this.form)
+      console.log(this.selectedFile);
+      MarkerService.addMarker({
+        lat: this.coords.lat,
+        lng: this.coords.lng,
+        selectedFile: this.selectedFile,
+      });
       this.getMarkers();
     },
-    setPlace() {},
-    onFileSelected(event) {
-      this.selectedFile = event.target.files[0];
+    //setPlace() {},
+    onFileSelected(file) {
+      this.selectedFile = file;
     },
     toggleSidePanel() {
       this.open = !this.open;

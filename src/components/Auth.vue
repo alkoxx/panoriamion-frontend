@@ -56,10 +56,11 @@ export default {
   },
   methods: {
     async submitForm() {
-      await AuthService.login({
+      let userUri = await AuthService.login({
         email: this.email,
         password: this.password,
       });
+      console.log(userUri);
     },
     getMarkers() {
       this.$store.dispatch("getMarkers");

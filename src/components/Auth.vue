@@ -60,7 +60,8 @@ export default {
         email: this.email,
         password: this.password,
       });
-      console.log(userUri);
+      //TODO: get user info from api using userUri and store all info in vuex
+      this.$store.commit("setUserId", userUri);
     },
     getMarkers() {
       this.$store.dispatch("getMarkers");

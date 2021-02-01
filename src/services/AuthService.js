@@ -12,9 +12,7 @@ export default {
         email: loginData.email,
         password: loginData.password,
       });
-      console.log(response.headers);
       let userUri = response.headers.location;
-      console.log(userUri);
       return userUri;
     } catch (error) {
       console.log(error);

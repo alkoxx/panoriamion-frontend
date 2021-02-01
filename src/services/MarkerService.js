@@ -1,4 +1,5 @@
 import axios from "axios";
+import store from "../store/store";
 
 const apiClient = axios.create({
   baseURL: "http://127.0.0.1:8000",
@@ -38,6 +39,7 @@ export default {
     fd.append("image", form.selectedFile);
     fd.append("lat", form.lat);
     fd.append("lng", form.lng);
+    fd.append("owner", store.getters.userId);
     try {
       await apiClient.post("/marker/add-marker", fd);
     } catch (error) {

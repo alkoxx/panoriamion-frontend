@@ -58,9 +58,18 @@ export default {
       MarkerService.addMarker({
         lat: this.coords.lat,
         lng: this.coords.lng,
-        selectedFile: this.selectedFile,
       });
+
+      //MarkerService.addFile(this.selectedFile)
+      //MarkerService.addMediaObject(this.selectedFile);
+      /*
+      MarkerService.addMarker({
+        lat: this.coords.lat,
+        lng: this.coords.lng,
+        selectedFile: this.selectedFile,
+      });      
       this.getMarkers();
+      */
     },
     //setPlace() {},
     onFileSelected(file) {

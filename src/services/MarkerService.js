@@ -35,13 +35,31 @@ export default {
     return markers;
   },
   async addMarker(form) {
+    /*
     const fd = new FormData();
     fd.append("image", form.selectedFile);
     fd.append("lat", form.lat);
     fd.append("lng", form.lng);
     fd.append("owner", store.getters.userId);
+    */
     try {
-      await apiClient.post("/marker/add-marker", fd);
+      let marker = await apiClient.post("api/markers", {
+        lat: form.lat.toString(),
+        lng: form.lng.toString(),
+        description: "Sample desc",
+        owner: store.getters.userId,
+      });
+      console.log("marker creado...");
+      console.log(marker.data["@id"]);
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  async addMediaObject(file) {
+    const fd = new FormData();
+    fd.append("image", file);
+    try {
+      await apiClient.post("/api/media_objects", fd);
     } catch (error) {
       console.log(error);
     }

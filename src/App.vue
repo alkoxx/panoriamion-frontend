@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <v-app>
-      <auth></auth>
+      <auth v-if="!loggedIn"></auth>
       <gmap-map
         ref="gmap"
         :center="center"
@@ -68,6 +68,7 @@ import infoCard from "./components/info-card";
 import sidePanel from "./components/side-panel";
 import auth from "./components/Auth";
 
+import { mapActions } from "vuex";
 import { mapState } from "vuex";
 
 export default {
@@ -98,12 +99,14 @@ export default {
     };
   },
   created() {
-    //this.$store.dispatch("getMarkers");
+    this.getMarkers();
+    console.log("logged: " + this.loggedIn);
   },
   computed: {
-    ...mapState(["markers"]),
+    ...mapState(["markers", "loggedIn"]),
   },
   methods: {
+    ...mapActions(["getMarkers"]),
     loadCoord(event) {
       this.coords.lat = event.latLng.lat();
       this.coords.lng = event.latLng.lng();

@@ -53,25 +53,14 @@ export default {
   },
   methods: {
     ...mapActions(["getMarkers"]),
-    submitMarker() {
-      console.log(this.selectedFile);
-      MarkerService.addMarker({
+    async submitMarker() {
+      await MarkerService.addMarker({
         lat: this.coords.lat,
         lng: this.coords.lng,
+        file: this.selectedFile,
       });
-
-      //MarkerService.addFile(this.selectedFile)
-      //MarkerService.addMediaObject(this.selectedFile);
-      /*
-      MarkerService.addMarker({
-        lat: this.coords.lat,
-        lng: this.coords.lng,
-        selectedFile: this.selectedFile,
-      });      
       this.getMarkers();
-      */
     },
-    //setPlace() {},
     onFileSelected(file) {
       this.selectedFile = file;
     },

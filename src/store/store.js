@@ -1,12 +1,14 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import MarkerService from "../services/MarkerService";
+import createPersistedState from "vuex-persistedstate";
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
     userId: "",
+    loggedIn: false,
     markers: [],
   },
   getters: {
@@ -24,6 +26,9 @@ export default new Vuex.Store({
     setUserId: (state, userId) => {
       state.userId = userId;
     },
+    setLoggedIn: (state, loggedIn) => {
+      state.loggedIn = loggedIn;
+    },
   },
   actions: {
     async getMarkers({ commit }) {
@@ -31,4 +36,5 @@ export default new Vuex.Store({
       commit("setMarkers", markers);
     },
   },
+  plugins: [createPersistedState({ paths: ["userId", "loggedIn"] })],
 });

@@ -35,13 +35,6 @@ export default {
     return markers;
   },
   async addMarker(form) {
-    /*
-    const fd = new FormData();
-    fd.append("image", form.selectedFile);
-    fd.append("lat", form.lat);
-    fd.append("lng", form.lng);
-    fd.append("owner", store.getters.userId);
-    */
     try {
       let marker = await apiClient.post("api/markers", {
         lat: form.lat.toString(),
@@ -49,17 +42,16 @@ export default {
         description: "Sample desc",
         owner: store.getters.userId,
       });
-      console.log("marker creado...");
-      console.log(marker.data["@id"]);
+      this.addFileObject(marker.data["@id"], form.file);
     } catch (error) {
       console.log(error);
     }
   },
-  async addMediaObject(file) {
+  async addFileObject(markerIRI, file) {
     const fd = new FormData();
     fd.append("image", file);
     try {
-      await apiClient.post("/api/media_objects", fd);
+      await apiClient.post(markerIRI + "/file", fd);
     } catch (error) {
       console.log(error);
     }

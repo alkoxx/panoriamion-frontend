@@ -23,9 +23,9 @@
               <v-btn x-large block color="success" @click.prevent="submitForm">
                 Login
               </v-btn>
-              <v-btn x-large block color="warning" @click.prevent="getMarkers">
-                Get Markers
-              </v-btn>
+            </v-col>
+            <v-col v-if="loginError" cols="12">
+              <p>{{ loginError }}</p>
             </v-col>
           </v-row>
         </v-form>
@@ -50,21 +50,28 @@ export default {
   data() {
     return {
       loginDialog: true,
+      loginError: "",
       email: "",
       password: "",
     };
   },
   methods: {
     async submitForm() {
-      let userUri = await AuthService.login({
-        email: this.email,
-        password: this.password,
-      });
-      //TODO: get user info from api using userUri and store all info in vuex
-      this.$store.commit("setUserId", userUri);
-    },
-    getMarkers() {
-      this.$store.dispatch("getMarkers");
+      try {
+        let userUri = await AuthService.login({
+          email: this.email,
+          password: this.password,
+        });
+        //TODO: get user info from api using userUri and store all info in vuex
+        this.$store.commit("setUserId", userUri);
+        this.$store.commit("setLoggedIn", true);
+      } catch (error) {
+        if (error.response.data.error) {
+          this.loginError = error.response.data.error;
+        } else {
+          this.loginError = "Unknown error";
+        }
+      }
     },
   },
 };

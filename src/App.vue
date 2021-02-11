@@ -64,15 +64,17 @@
 </template>
 
 <script>
-import infoCard from "./components/info-card";
-import sidePanel from "./components/side-panel";
-import auth from "./components/Auth";
+import infoCard from './components/info-card';
+import sidePanel from './components/side-panel';
+import auth from './components/Auth';
 
-import { mapActions } from "vuex";
-import { mapState } from "vuex";
+import { mapState } from 'vuex';
+import { mapMutations } from 'vuex';
+import { mapActions } from 'vuex';
+import AuthService from './services/AuthService';
 
 export default {
-  name: "App",
+  name: 'App',
   components: {
     infoCard,
     sidePanel,
@@ -82,8 +84,8 @@ export default {
     return {
       center: { lat: 43.0, lng: -2.0 },
       coords: {
-        lat: "",
-        lng: "",
+        lat: '',
+        lng: '',
       },
       selectedMarker: null,
       infoWindowPos: null,
@@ -99,14 +101,24 @@ export default {
     };
   },
   created() {
-    this.getMarkers();
-    console.log("logged: " + this.loggedIn);
+    this.setupInitialState();
   },
   computed: {
-    ...mapState(["markers", "loggedIn"]),
+    ...mapState(['userId', 'markers', 'loggedIn']),
   },
   methods: {
-    ...mapActions(["getMarkers"]),
+    ...mapMutations(['resetValues']),
+    ...mapActions(['getMarkers']),
+    async setupInitialState() {
+      if (this.userId) {
+        try {
+          await AuthService.checkAuthenticated(this.userId);
+          this.getMarkers();
+        } catch (error) {
+          this.resetValues();
+        }
+      }
+    },
     loadCoord(event) {
       this.coords.lat = event.latLng.lat();
       this.coords.lng = event.latLng.lng();

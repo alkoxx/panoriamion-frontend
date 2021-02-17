@@ -44,18 +44,23 @@
 </template>
 
 <script>
-import AuthService from "../services/AuthService";
+import AuthService from '../services/AuthService';
+
+import { mapMutations } from 'vuex';
+import { mapActions } from 'vuex';
 
 export default {
   data() {
     return {
       loginDialog: true,
-      loginError: "",
-      email: "",
-      password: "",
+      loginError: '',
+      email: '',
+      password: '',
     };
   },
   methods: {
+    ...mapMutations(['setUserId', 'setLoggedIn']),
+    ...mapActions(['getMarkers']),
     async submitForm() {
       try {
         let userUri = await AuthService.login({
@@ -63,13 +68,14 @@ export default {
           password: this.password,
         });
         //TODO: get user info from api using userUri and store all info in vuex
-        this.$store.commit("setUserId", userUri);
-        this.$store.commit("setLoggedIn", true);
+        this.setUserId(userUri);
+        this.setLoggedIn(true);
+        this.getMarkers();
       } catch (error) {
         if (error.response.data.error) {
           this.loginError = error.response.data.error;
         } else {
-          this.loginError = "Unknown error";
+          this.loginError = 'Unknown error';
         }
       }
     },

@@ -37,22 +37,22 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
-import MarkerService from "../services/MarkerService";
+import { mapActions } from 'vuex';
+import MarkerService from '../services/MarkerService';
 
 export default {
-  name: "SidePanel",
+  name: 'SidePanel',
   props: {
     coords: Object,
   },
   data() {
     return {
       open: true,
-      selectedFile: "",
+      selectedFile: '',
     };
   },
   methods: {
-    ...mapActions(["getMarkers"]),
+    ...mapActions(['getMarkers']),
     async submitMarker() {
       await MarkerService.addMarker({
         lat: this.coords.lat,

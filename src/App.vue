@@ -49,7 +49,9 @@
                       contain
                       height="100%"
                       :src="
-                        'http://127.0.0.1:8000' + '/uploads/' + marker.image
+                        'http://127.0.0.1:8000/api/markers/' +
+                          marker.id +
+                          '/file'
                       "
                     ></v-img>
                   </v-carousel-item>
@@ -68,10 +70,11 @@ import infoCard from './components/info-card';
 import sidePanel from './components/side-panel';
 import auth from './components/Auth';
 
+import AuthService from './services/AuthService';
+
 import { mapState } from 'vuex';
 import { mapMutations } from 'vuex';
 import { mapActions } from 'vuex';
-import AuthService from './services/AuthService';
 
 export default {
   name: 'App',

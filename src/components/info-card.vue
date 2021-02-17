@@ -2,7 +2,7 @@
   <v-card class="info-card">
     <v-img
       width="300"
-      :src="'http://127.0.0.1:8000' + '/uploads/' + marker.image"
+      :src="'http://127.0.0.1:8000/api/markers/' + marker.id + '/file'"
     >
     </v-img>
     <v-card-title>Info</v-card-title>
@@ -12,7 +12,7 @@
 
 <script>
 export default {
-  name: "InfoCard",
+  name: 'InfoCard',
   props: {
     marker: Object,
   },

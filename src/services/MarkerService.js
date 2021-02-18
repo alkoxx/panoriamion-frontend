@@ -41,6 +41,13 @@ export default {
       console.log(error);
     }
   },
+  async removeMarker(markerId) {
+    try {
+      await apiClient.delete('api/markers/' + markerId);
+    } catch (error) {
+      console.log(error);
+    }
+  },
   async addFileObject(markerIRI, file) {
     const fd = new FormData();
     fd.append('image', file);

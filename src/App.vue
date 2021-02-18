@@ -27,7 +27,8 @@
           <info-card
             v-if="selectedMarker"
             :marker="selectedMarker"
-            @click.native="dialog = !dialog"
+            @load-dialog="dialog = true"
+            @close-info-window="infoWinOpen = false"
           ></info-card>
         </gmap-info-window>
 

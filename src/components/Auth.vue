@@ -1,42 +1,51 @@
 <template>
   <v-dialog v-model="loginDialog" width="500">
     <v-card>
+      <v-card-title>
+        <h1 class="display-1">Login</h1>
+      </v-card-title>
       <v-card-text>
-        <v-form @submit.prevent="submitForm()">
-          <v-row>
-            <v-col cols="12">
-              <v-text-field
-                label="E-mail"
-                v-model="email"
-                required
-              ></v-text-field>
-            </v-col>
-            <v-col cols="12">
-              <v-text-field
-                label="Password"
-                v-model="password"
-                counter
-              ></v-text-field>
-            </v-col>
-            <v-spacer></v-spacer>
-            <v-col class="d-flex" cols="12" sm="3" xsm="12" align-end>
-              <v-btn x-large block color="success" @click.prevent="submitForm">
-                Login
-              </v-btn>
-            </v-col>
-            <v-col v-if="loginError" cols="12">
-              <p>{{ loginError }}</p>
-            </v-col>
-          </v-row>
+        <v-form @submit.prevent="submitForm()" v-model="formValidity">
+          <v-text-field
+            label="E-mail"
+            v-model="email"
+            type="email"
+            prepend-icon="mdi-account-circle"
+            :rules="emailRules"
+          ></v-text-field>
+          <v-text-field
+            label="Password"
+            v-model="password"
+            :type="showPassword ? 'text' : 'password'"
+            prepend-icon="mdi-lock"
+            :append-icon="!showPassword ? 'mdi-eye-off' : 'mdi-eye'"
+            @click:append="showPassword = !showPassword"
+            :rules="passwordRules"
+          ></v-text-field>
         </v-form>
       </v-card-text>
-
+      <v-alert
+        :value="loginError"
+        class="mx-auto"
+        width="350"
+        dense
+        outlined
+        type="warning"
+        border="left"
+        transition="scale-transition"
+      >
+        {{ loginError }}
+      </v-alert>
       <v-divider></v-divider>
-
       <v-card-actions>
+        <v-btn color="success">Register</v-btn>
         <v-spacer></v-spacer>
-        <v-btn color="primary" text @click="loginDialog = false">
-          Cancel
+        <v-btn
+          color="info"
+          @click.prevent="submitForm"
+          :disabled="!formValidity"
+        >
+          Login
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -53,9 +62,13 @@ export default {
   data() {
     return {
       loginDialog: true,
-      loginError: '',
+      loginError: null,
       email: '',
       password: '',
+      showPassword: false,
+      emailRules: [(value) => !!value || 'E-mail is required.'],
+      passwordRules: [(value) => !!value || 'Password is required.'],
+      formValidity: false,
     };
   },
   methods: {

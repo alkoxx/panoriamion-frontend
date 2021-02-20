@@ -8,7 +8,7 @@
         :zoom="5"
         map-type-id="hybrid"
         class="gmap"
-        @click="loadCoord($event)"
+        @click="clickOnMap($event)"
       >
         <gmap-marker
           v-for="(marker, i) in markers"
@@ -22,7 +22,7 @@
           :options="infoOptions"
           :position="infoWindowPos"
           :opened="infoWinOpen"
-          @closeclick="infoWinOpen = false"
+          @closeclick="!infoWinOpen"
         >
           <info-card
             v-if="selectedMarker"
@@ -35,7 +35,11 @@
         <template v-slot:visible>
           <v-row>
             <v-col cols="2">
-              <side-panel :coords="coords"></side-panel>
+              <side-panel
+                :coords="coords"
+                :sidePanelCollapse="sidePanelCollapse"
+                @collapse-side-panel="sidePanelCollapse = true"
+              ></side-panel>
             </v-col>
             <v-col cols="10">
               <v-dialog v-model="dialog" fullscreen>
@@ -102,6 +106,7 @@ export default {
         },
       },
       dialog: false,
+      sidePanelCollapse: true,
     };
   },
   created() {
@@ -123,7 +128,9 @@ export default {
         }
       }
     },
-    loadCoord(event) {
+    clickOnMap(event) {
+      this.infoWinOpen = false;
+      this.sidePanelCollapse = false;
       this.coords.lat = event.latLng.lat();
       this.coords.lng = event.latLng.lng();
     },

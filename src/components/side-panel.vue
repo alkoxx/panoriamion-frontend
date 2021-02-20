@@ -1,6 +1,5 @@
 <template>
-  <div>
-    <!--
+  <!--
     <label>
       AutoComplete
       <gmap-autocomplete
@@ -10,30 +9,55 @@
       </gmap-autocomplete>
     </label>
     -->
-    <transition name="fade">
-      <v-card v-if="open" class="sidepanel" dark>
-        <v-card-title>
-          <h2>Create Marker</h2>
-        </v-card-title>
-        <v-card-text>
-          <v-form>
-            <v-text-field label="Latitude" v-model="coords.lat" />
-            <v-text-field label="Longitude" v-model="coords.lng" />
-            <v-file-input
-              accept="image/*"
-              label="File input"
-              @change="onFileSelected"
-            ></v-file-input>
-          </v-form>
-        </v-card-text>
-        <v-card-actions>
-          <v-btn @click.prevent="submitMarker" color="success">Add</v-btn>
-        </v-card-actions>
-      </v-card>
-    </transition>
-
-    <v-btn @click="toggle">Toggle</v-btn>
-  </div>
+  <v-card
+    v-if="open"
+    class="sidepanel"
+    :class="{ 'sidepanel-collapse': sidePanelCollapse }"
+    dark
+  >
+    <v-card-title>
+      <h2>Create Marker</h2>
+    </v-card-title>
+    <v-card-text>
+      <v-form v-model="formValidity">
+        <v-text-field
+          readonly
+          label="Latitude"
+          v-model="coords.lat"
+          :rules="latRules"
+        />
+        <v-text-field
+          readonly
+          label="Longitude"
+          v-model="coords.lng"
+          :rules="lngRules"
+        />
+        <v-file-input
+          accept="image/*"
+          label="Image"
+          prepend-icon="mdi-camera"
+          @change="onFileSelected"
+          :rules="imageRules"
+        ></v-file-input>
+      </v-form>
+    </v-card-text>
+    <v-card-actions>
+      <v-btn
+        class="mx-auto"
+        @click.prevent="submitMarker"
+        color="success"
+        :disabled="!formValidity"
+        >Create</v-btn
+      >
+    </v-card-actions>
+    <div class="toggle-button-container">
+      <v-btn min-width="23" height="48" @click="$emit('collapse-side-panel')">
+        <v-icon dark>
+          mdi-minus
+        </v-icon>
+      </v-btn>
+    </div>
+  </v-card>
 </template>
 
 <script>
@@ -44,11 +68,16 @@ export default {
   name: 'SidePanel',
   props: {
     coords: Object,
+    sidePanelCollapse: Boolean,
   },
   data() {
     return {
       open: true,
       selectedFile: '',
+      latRules: [(value) => !!value || 'Latitude is required'],
+      lngRules: [(value) => !!value || 'Longitude is required'],
+      imageRules: [(value) => !!value || 'You must select an image'],
+      formValidity: false,
     };
   },
   methods: {
@@ -60,6 +89,7 @@ export default {
         file: this.selectedFile,
       });
       this.getMarkers();
+      this.$emit('collapse-side-panel');
     },
     onFileSelected(file) {
       this.selectedFile = file;
@@ -78,20 +108,18 @@ export default {
 .sidepanel {
   height: calc(100vh - 50px);
   padding-top: 30px;
-  max-width: 400px;
-  background-color: rgba($color: #242424, $alpha: 0.6);
+  width: 400px;
+  background-color: rgba($color: #242424, $alpha: 0.8);
+  transition: transform 0.3s cubic-bezier(0, 0, 0.2, 1);
 }
 
-.fade-enter {
-  opacity: 0;
+.sidepanel-collapse {
+  transform: translateX(-400px);
 }
 
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 1s;
-}
-
-.fade-leave-to {
-  opacity: 0;
+.toggle-button-container {
+  position: absolute;
+  top: 8px;
+  left: 100%;
 }
 </style>

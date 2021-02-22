@@ -1,5 +1,9 @@
 <template>
-  <v-dialog v-model="loginDialog" width="500">
+  <v-dialog
+    v-model="loginDialog"
+    transition="dialog-bottom-transition"
+    width="500"
+  >
     <v-card>
       <v-card-title>
         <h1 class="display-1">Login</h1>
@@ -55,13 +59,13 @@
 <script>
 import AuthService from '../services/AuthService';
 
+import { mapState } from 'vuex';
 import { mapMutations } from 'vuex';
 import { mapActions } from 'vuex';
 
 export default {
   data() {
     return {
-      loginDialog: true,
       loginError: null,
       email: '',
       password: '',
@@ -70,6 +74,12 @@ export default {
       passwordRules: [(value) => !!value || 'Password is required.'],
       formValidity: false,
     };
+  },
+  computed: {
+    ...mapState(['loggedIn']),
+    loginDialog() {
+      return !this.loggedIn;
+    },
   },
   methods: {
     ...mapMutations(['setUserId', 'setLoggedIn']),

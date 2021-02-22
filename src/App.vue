@@ -1,11 +1,14 @@
 <template>
   <div id="app">
     <v-app>
-      <auth v-if="!loggedIn"></auth>
+      <auth></auth>
       <gmap-map
         ref="gmap"
         :center="center"
         :zoom="5"
+        :options="{
+          fullscreenControl: false,
+        }"
         map-type-id="hybrid"
         class="gmap"
         @click="clickOnMap($event)"
@@ -33,37 +36,32 @@
         </gmap-info-window>
 
         <template v-slot:visible>
-          <v-row>
-            <v-col cols="2">
-              <side-panel
-                :coords="coords"
-                :sidePanelCollapse="sidePanelCollapse"
-                @collapse-side-panel="sidePanelCollapse = true"
-              ></side-panel>
-            </v-col>
-            <v-col cols="10">
-              <v-dialog v-model="dialog" fullscreen>
-                <div class="dialog-close">
-                  <v-btn dark icon @click="dialog = false">
-                    <v-icon>mdi-close</v-icon>
-                  </v-btn>
-                </div>
-                <v-carousel height="100%" dark>
-                  <v-carousel-item v-for="(marker, i) in markers" :key="i">
-                    <v-img
-                      contain
-                      height="100%"
-                      :src="
-                        'http://127.0.0.1:8000/api/markers/' +
-                          marker.id +
-                          '/file'
-                      "
-                    ></v-img>
-                  </v-carousel-item>
-                </v-carousel>
-              </v-dialog>
-            </v-col>
-          </v-row>
+          <side-panel
+            :coords="coords"
+            :sidePanelCollapse="sidePanelCollapse"
+            @collapse-side-panel="sidePanelCollapse = !sidePanelCollapse"
+          ></side-panel>
+
+          <user-status></user-status>
+
+          <v-dialog v-model="dialog" fullscreen>
+            <div class="dialog-close">
+              <v-btn dark icon @click="dialog = false">
+                <v-icon>mdi-close</v-icon>
+              </v-btn>
+            </div>
+            <v-carousel height="100%" dark>
+              <v-carousel-item v-for="(marker, i) in markers" :key="i">
+                <v-img
+                  contain
+                  height="100%"
+                  :src="
+                    'http://127.0.0.1:8000/api/markers/' + marker.id + '/file'
+                  "
+                ></v-img>
+              </v-carousel-item>
+            </v-carousel>
+          </v-dialog>
         </template>
       </gmap-map>
     </v-app>
@@ -74,6 +72,7 @@
 import infoCard from './components/info-card';
 import sidePanel from './components/side-panel';
 import auth from './components/Auth';
+import userStatus from './components/user-status';
 
 import AuthService from './services/AuthService';
 
@@ -87,6 +86,7 @@ export default {
     infoCard,
     sidePanel,
     auth,
+    userStatus,
   },
   data() {
     return {

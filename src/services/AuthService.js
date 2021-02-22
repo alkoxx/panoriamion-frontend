@@ -18,4 +18,8 @@ export default {
   async checkAuthenticated(userId) {
     await apiClient.get(userId);
   },
+
+  async logout() {
+    await apiClient.get('/logout');
+  },
 };

@@ -1,7 +1,6 @@
 <template>
   <div id="app">
     <v-app>
-      <auth></auth>
       <gmap-map
         ref="gmap"
         :center="center"
@@ -42,7 +41,10 @@
             @collapse-side-panel="sidePanelCollapse = !sidePanelCollapse"
           ></side-panel>
 
-          <user-status></user-status>
+          <user-status
+            :userInfoOpen="userInfoOpen"
+            @toggleUserInfo="userInfoOpen = !userInfoOpen"
+          ></user-status>
 
           <v-dialog v-model="dialog" fullscreen>
             <div class="dialog-close">
@@ -71,7 +73,6 @@
 <script>
 import infoCard from './components/info-card';
 import sidePanel from './components/side-panel';
-import auth from './components/Auth';
 import userStatus from './components/user-status';
 
 import AuthService from './services/AuthService';
@@ -85,7 +86,6 @@ export default {
   components: {
     infoCard,
     sidePanel,
-    auth,
     userStatus,
   },
   data() {
@@ -98,6 +98,7 @@ export default {
       selectedMarker: null,
       infoWindowPos: null,
       infoWinOpen: false,
+      userInfoOpen: false,
       currentMarkerId: null,
       infoOptions: {
         pixelOffset: {
@@ -130,6 +131,7 @@ export default {
     },
     clickOnMap(event) {
       this.infoWinOpen = false;
+      this.userInfoOpen = false;
       this.sidePanelCollapse = false;
       this.coords.lat = event.latLng.lat();
       this.coords.lng = event.latLng.lng();

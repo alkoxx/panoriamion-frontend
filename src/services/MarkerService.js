@@ -3,7 +3,7 @@ import store from '../store/store';
 
 const apiClient = axios.create({
   //TODO: Ver como guardar el baseURL en una constante y utilizarla en toda la aplicación. ¿en store o fichero aparte?
-  baseURL: 'http://127.0.0.1:8000',
+  baseURL: process.env.VUE_APP_API_URL,
   withCredentials: true,
 });
 

@@ -1,14 +1,14 @@
-import Vue from 'vue'
-import App from './App.vue'
-import * as GmapVue from 'gmap-vue'
-import vuetify from './plugins/vuetify'
-import store from './store/store'
+import Vue from 'vue';
+import App from './App.vue';
+import * as GmapVue from 'gmap-vue';
+import vuetify from './plugins/vuetify';
+import store from './store/store';
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
 Vue.use(GmapVue, {
   load: {
-    key: 'AIzaSyCgpDLAUQUXnjUVXVc7UpB91hwLfDH1xLA',
+    key: process.env.VUE_APP_GMAP_KEY,
     libraries: 'places', // This is required if you use the Autocomplete plugin
     // OR: libraries: 'places,drawing'
     // OR: libraries: 'places,drawing,visualization'
@@ -29,11 +29,11 @@ Vue.use(GmapVue, {
   //// Vue.component('GmapMarker', GmapMarker)
   //// then set installComponents to 'false'.
   //// If you want to automatically install all the components this property must be set to 'true':
-  installComponents: true
-})
+  installComponents: true,
+});
 
 new Vue({
   vuetify,
   store,
-  render: h => h(App)
-}).$mount('#app')
+  render: (h) => h(App),
+}).$mount('#app');

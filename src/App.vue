@@ -58,7 +58,10 @@
                   contain
                   height="100%"
                   :src="
-                    'http://127.0.0.1:8000/api/markers/' + marker.id + '/file'
+                    process.env.VUE_APP_API_URL +
+                      '/markers/' +
+                      marker.id +
+                      '/file'
                   "
                 ></v-img>
               </v-carousel-item>

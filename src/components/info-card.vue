@@ -4,9 +4,7 @@
       <div class="image-container">
         <v-img
           width="300"
-          :src="
-            process.env.VUE_APP_API_URL + '/api/markers/' + marker.id + '/file'
-          "
+          :src="apiUrl + '/api/markers/' + marker.id + '/file'"
           @click="$emit('load-dialog')"
         >
         </v-img>
@@ -55,6 +53,7 @@ export default {
   },
   props: {
     marker: Object,
+    apiUrl: String,
   },
   methods: {
     ...mapActions(['getMarkers']),

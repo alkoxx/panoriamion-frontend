@@ -29,6 +29,7 @@
           <info-card
             v-if="selectedMarker"
             :marker="selectedMarker"
+            :apiUrl="apiUrl"
             @load-dialog="dialog = true"
             @close-info-window="infoWinOpen = false"
           ></info-card>
@@ -57,12 +58,7 @@
                 <v-img
                   contain
                   height="100%"
-                  :src="
-                    process.env.VUE_APP_API_URL +
-                      '/api/markers/' +
-                      marker.id +
-                      '/file'
-                  "
+                  :src="apiUrl + '/api/markers/' + marker.id + '/file'"
                 ></v-img>
               </v-carousel-item>
             </v-carousel>
@@ -118,6 +114,9 @@ export default {
   },
   computed: {
     ...mapState(['userId', 'markers', 'loggedIn']),
+    apiUrl() {
+      return process.env.VUE_APP_API_URL;
+    },
   },
   methods: {
     ...mapMutations(['resetValues']),

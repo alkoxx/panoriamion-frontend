@@ -12,7 +12,7 @@ export default {
     let response;
     let markers = [];
     try {
-      response = await apiClient.get('/markers');
+      response = await apiClient.get('/api/markers');
     } catch (error) {
       console.log(error);
     }
@@ -30,7 +30,7 @@ export default {
   },
   async addMarker(form) {
     try {
-      let marker = await apiClient.post('/markers', {
+      let marker = await apiClient.post('/api/markers', {
         lat: form.lat.toString(),
         lng: form.lng.toString(),
         description: 'Sample desc',
@@ -43,7 +43,7 @@ export default {
   },
   async removeMarker(markerId) {
     try {
-      await apiClient.delete('/markers/' + markerId);
+      await apiClient.delete('/api/markers/' + markerId);
     } catch (error) {
       console.log(error);
     }

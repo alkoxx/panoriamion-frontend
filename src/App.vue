@@ -59,7 +59,7 @@
                   height="100%"
                   :src="
                     process.env.VUE_APP_API_URL +
-                      '/markers/' +
+                      '/api/markers/' +
                       marker.id +
                       '/file'
                   "

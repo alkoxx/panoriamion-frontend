@@ -4,7 +4,9 @@
       <div class="image-container">
         <v-img
           width="300"
-          :src="process.env.VUE_APP_API_URL + '/markers/' + marker.id + '/file'"
+          :src="
+            process.env.VUE_APP_API_URL + '/api/markers/' + marker.id + '/file'
+          "
           @click="$emit('load-dialog')"
         >
         </v-img>
